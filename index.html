@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victor Ndambuki - Mechanical Design Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff00f7;
+            --accent: #7000ff;
+            --dark: #0a0a0f;
+            --darker: #050508;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 0, 247, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(112, 0, 255, 0.1) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5%, 5%) rotate(90deg); }
+            50% { transform: translate(-5%, 5%) rotate(180deg); }
+            75% { transform: translate(-5%, -5%) rotate(270deg); }
+        }
+
+        /* Grid overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 15px 5%;
+            background: rgba(5, 5, 8, 0.95);
+        }
+
+        .logo {
+            font-size: clamp(20px, 5vw, 28px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(15px, 3vw, 40px);
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: clamp(11px, 2vw, 14px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 5% 60px;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(800px, 90vw);
+            height: min(800px, 90vw);
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.2) 0%, transparent 70%);
+            filter: blur(100px);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 50px;
+            font-size: clamp(10px, 2vw, 12px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease 0.2s both;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 12vw, 120px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary) 50%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .hero h2 {
+            font-size: clamp(18px, 5vw, 48px);
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: -1px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .hero p {
+            font-size: clamp(14px, 3vw, 18px);
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            line-height: 1.8;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 1s both;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: clamp(14px, 3vw, 18px) clamp(25px, 5vw, 40px);
+            font-size: clamp(13px, 2.5vw, 16px);
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(0, 240, 255, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+            border: 2px solid rgba(0, 240, 255, 0.5);
+            border-radius: 25px;
+            animation: fadeIn 1s ease 1.5s both;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: scrollDown 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: clamp(60px, 10vw, 120px) 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: clamp(40px, 8vw, 80px);
+        }
+
+        .section-label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 50px;
+            font-size: clamp(10px, 2vw, 12px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 8vw, 72px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            letter-spacing: -2px;
+        }
+
+        .section-subtitle {
+            font-size: clamp(14px, 3vw, 18px);
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Filter Buttons */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: clamp(40px, 6vw, 60px);
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+
+        .filter-btn {
+            padding: clamp(10px, 2vw, 12px) clamp(15px, 3vw, 30px);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            font-size: clamp(11px, 2vw, 14px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn:active {
+            transform: translateY(0);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(100%, 350px), 1fr));
+            gap: clamp(20px, 4vw, 40px);
+            margin-bottom: 60px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(255, 0, 247, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:active {
+            transform: translateY(-5px);
+        }
+
+        .project-image-wrapper {
+            width: 100%;
+            height: clamp(200px, 40vw, 350px);
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 247, 0.1));
+        }
+
+        .project-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(40px, 10vw, 72px);
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-content {
+            padding: clamp(20px, 4vw, 30px);
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .project-category {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 20px;
+            font-size: clamp(9px, 2vw, 11px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+        }
+
+        .project-title {
+            font-size: clamp(18px, 4vw, 24px);
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .project-description {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.7;
+            font-size: clamp(13px, 2.5vw, 15px);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+            gap: clamp(30px, 6vw, 60px);
+            align-items: start;
+        }
+
+        .about-content h3 {
+            font-size: clamp(24px, 5vw, 32px);
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .about-content p {
+            font-size: clamp(14px, 3vw, 17px);
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: clamp(15px, 3vw, 30px);
+            margin-top: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: clamp(20px, 4vw, 30px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .stat-card:hover {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .stat-card:active {
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: clamp(32px, 8vw, 48px);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: clamp(11px, 2vw, 14px);
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+            gap: clamp(15px, 3vw, 20px);
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: clamp(20px, 4vw, 30px);
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .skill-card:hover {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 240, 255, 0.2);
+        }
+
+        .skill-card:active {
+            transform: translateY(-4px) scale(1.01);
+        }
+
+        .skill-icon {
+            font-size: clamp(32px, 8vw, 48px);
+            margin-bottom: 15px;
+            filter: grayscale(1);
+            transition: filter 0.4s ease;
+        }
+
+        .skill-card:hover .skill-icon {
+            filter: grayscale(0);
+        }
+
+        .skill-card h4 {
+            font-size: clamp(14px, 3vw, 18px);
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .skill-card p {
+            font-size: clamp(11px, 2vw, 14px);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: clamp(20px, 4vw, 40px);
+            margin-top: clamp(40px, 6vw, 60px);
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: clamp(25px, 5vw, 40px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .contact-card:hover {
+            background: rgba(0, 240, 255, 0.05);
+            border-color: rgba(0, 240, 255, 0.3);
+            transform: translateY(-10px);
+        }
+
+        .contact-card:active {
+            transform: translateY(-5px);
+        }
+
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .contact-icon {
+            font-size: clamp(36px, 8vw, 48px);
+            margin-bottom: 20px;
+        }
+
+        .contact-label {
+            font-size: clamp(10px, 2vw, 12px);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .contact-value {
+            font-size: clamp(14px, 3vw, 20px);
+            color: #ffffff;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .contact-value a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-value a:hover {
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: clamp(40px, 6vw, 60px) 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        footer p {
+            font-size: clamp(12px, 2vw, 14px);
+        }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: calc(100vh - 70px);
+                background: rgba(5, 5, 8, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 40px 20px;
+                gap: 30px;
+                transition: right 0.4s ease;
+                border-left: 1px solid rgba(0, 240, 255, 0.2);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .scroll-indicator {
+                display: none;
+            }
+
+            .hero {
+                min-height: 90vh;
+            }
+        }
+
+        /* Tablet optimizations */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            animation: fadeInScale 0.6s ease forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .project-card:hover,
+            .skill-card:hover,
+            .stat-card:hover,
+            .contact-card:hover {
+                transform: none;
+            }
+
+            .project-card:active {
+                transform: scale(0.98);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="content-wrapper">
+        <nav class="nav">
+            <div class="logo">VN</div>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">☰</button>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <section id="home" class="hero">
+            <div class="hero-glow"></div>
+            <div class="hero-content">
+                <div class="hero-label">Mechanical Design Engineer</div>
+                <h1>VICTOR<br>NDAMBUKI</h1>
+                <h2>Engineering Innovation Through Design</h2>
+                <p>Transforming complex engineering challenges into elegant CAD solutions. Specializing in mechanical systems, sustainable design, and product innovation.</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn-primary">Explore Projects</a>
+                    <a href="#contact" class="btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="scroll-indicator"></div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="section-header">
+                <div class="section-label">Portfolio</div>
+                <h2 class="section-title">Featured Work</h2>
+                <p class="section-subtitle">A curated collection of engineering design projects showcasing innovation, precision, and creative problem-solving</p>
+            </div>
+
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="automotive">Automotive</button>
+                <button class="filter-btn" data-filter="machinery">Machinery</button>
+                <button class="filter-btn" data-filter="renewable">Renewable</button>
+                <button class="filter-btn" data-filter="consumer">Consumer</button>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card loading" data-category="automotive" style="animation-delay: 0.1s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #1a1a2e, #2d2d44); color: rgba(0,240,255,0.3);">🚗</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Automotive</span>
+                        </div>
+                        <h3 class="project-title">Classic Car CAD Model</h3>
+                        <p class="project-description">Commissioned design showcasing classic automotive beauty using SolidWorks sheet metal techniques.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="renewable" style="animation-delay: 0.2s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #ff9a00, #ff6b00); color: rgba(255,255,255,0.3);">☀️</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Renewable</span>
+                        </div>
+                        <h3 class="project-title">Solar Dryer System</h3>
+                        <p class="project-description">Comprehensive CAD assembly for grain and produce preservation using sustainable solar energy.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="machinery" style="animation-delay: 0.3s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #667eea, #764ba2); color: rgba(255,255,255,0.3);">🔧</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">HCD</span>
+                        </div>
+                        <h3 class="project-title">Poultry Defeathering Machine</h3>
+                        <p class="project-description">Human-centered design project addressing poultry processing needs with user experience focus.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="machinery" style="animation-delay: 0.4s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #00d2ff, #3a7bd5); color: rgba(255,255,255,0.3);">⚙️</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Education</span>
+                        </div>
+                        <h3 class="project-title">SCOSE Steam Engine</h3>
+                        <p class="project-description">Fully-functional virtual teaching tool for understanding complex thermodynamic principles.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="machinery" style="animation-delay: 0.5s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: rgba(255,255,255,0.3);">✈️</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Education</span>
+                        </div>
+                        <h3 class="project-title">Radial Engine Model</h3>
+                        <p class="project-description">Educational model demonstrating radial engine mechanics through interactive visualization.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="automotive" style="animation-delay: 0.6s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #fa709a, #fee140); color: rgba(255,255,255,0.3);">🏎️</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Personal</span>
+                        </div>
+                        <h3 class="project-title">Car Design Collection</h3>
+                        <p class="project-description">Hobby portfolio showcasing unique automotive concepts and creative design exploration.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="machinery" style="animation-delay: 0.7s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #30cfd0, #330867); color: rgba(255,255,255,0.3);">💧</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Sustainable</span>
+                        </div>
+                        <h3 class="project-title">Pedal-Powered Pump</h3>
+                        <p class="project-description">Off-grid water distribution solution utilizing bicycle mechanics for electricity-free operation.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="consumer" style="animation-delay: 0.8s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #a8edea, #fed6e3); color: rgba(0,0,0,0.3);">🍳</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Consumer</span>
+                        </div>
+                        <h3 class="project-title">Sufuria Washer</h3>
+                        <p class="project-description">Innovative kitchen appliance for efficient cookware cleaning with mechanical automation.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="consumer" style="animation-delay: 0.9s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: rgba(255,255,255,0.3);">🥗</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Consumer</span>
+                        </div>
+                        <h3 class="project-title">Smart Vegetable Chopper</h3>
+                        <p class="project-description">Home kitchen efficiency innovation with blender motor base integration for rapid prep.</p>
+                    </div>
+                </div>
+
+                <div class="project-card loading" data-category="renewable" style="animation-delay: 1s;">
+                    <div class="project-image-wrapper">
+                        <div class="project-image" style="background: linear-gradient(135deg, #00c6ff, #0072ff); color: rgba(255,255,255,0.3);">🌬️</div>
+                        <div class="project-overlay"></div>
+                    </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <span class="project-category">Final Year</span>
+                        </div>
+                        <h3 class="project-title">Wind Tunnel Design</h3>
+                        <p class="project-description">Capstone project featuring comprehensive CAD development for aerodynamic testing facility.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="section-header">
+                <div class="section-label">About Me</div>
+                <h2 class="section-title">Engineering Excellence</h2>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-content">
+                    <h3>Bringing Ideas to Life</h3>
+                    <p>I'm Victor Ndambuki, a passionate Mechanical Design Engineer with a B.Eng in Mechanical Engineering. My journey in engineering is driven by a commitment to innovative problem-solving and precision design.</p>
+                    <p>With expertise in SolidWorks and CAD modeling, I transform conceptual ideas into tangible, functional solutions. My work spans automotive design, sustainable energy systems, educational tools, and consumer products.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">Years</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Quality</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">Innovation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skills-grid" style="margin-top: clamp(40px, 8vw, 80px);">
+                <div class="skill-card">
+                    <div class="skill-icon">💻</div>
+                    <h4>CAD Mastery</h4>
+                    <p>SolidWorks, 3D Modeling</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">⚙️</div>
+                    <h4>Mechanical Design</h4>
+                    <p>Systems Integration</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🎨</div>
+                    <h4>Product Dev</h4>
+                    <p>Concept to Prototype</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">👥</div>
+                    <h4>HCD Principles</h4>
+                    <p>User-Centered</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🔬</div>
+                    <h4>Analysis</h4>
+                    <p>Validation & Testing</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🌱</div>
+                    <h4>Sustainable</h4>
+                    <p>Eco-Friendly Design</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="section-header">
+                <div class="section-label">Get In Touch</div>
+                <h2 class="section-title">Let's Collaborate</h2>
+                <p class="section-subtitle">Have a project in mind? Let's discuss how we can bring your engineering vision to reality</p>
+            </div>
+
+            <div class="contact-container">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value"><a href="mailto:ndambukivic@gmail.com">ndambukivic@gmail.com</a></div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-label">Phone</div>
+                        <div class="contact-value"><a href="tel:+254700801908">+254 700 801 908</a></div>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-label">Location</div>
+                        <div class="contact-value">Thika, Kenya</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Victor Ndambuki. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Nav scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Project filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+                
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                projectCards.forEach((card, index) => {
+                    const category = card.getAttribute('data-category');
+                    
+                    if (filter === 'all' || category === filter) {
+                        card.style.display = 'flex';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0) scale(1)';
+                        }, index * 50);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px) scale(0.95)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) scale(1)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect (disabled on mobile for performance)
+        if (window.innerWidth > 768) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const parallaxElements = document.querySelectorAll('.hero-glow');
+                
+                parallaxElements.forEach(el => {
+                    const speed = 0.5;
+                    el.style.transform = `translate(-50%, -50%) translateY(${scrolled * speed}px)`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
